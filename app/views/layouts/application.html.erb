@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for?(:title) ? "#{yield(:title)} | " : "" %><%= t("app.name") %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+
+    <%= javascript_importmap_tags %>
+    <%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+  </head>
+
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <h3><%= link_to t("app.name"), root_path, class: "sidebar-link" %></h3>
+
+        <% if user_signed_in? %>
+          <%= current_user.email %>
+          <%= button_to t(".sign_out"), destroy_user_session_path, method: :delete %>
+        <% else %>
+          <%= link_to t("devise.shared.links.sign_in"), new_user_session_path %>
+          <%= link_to t("devise.shared.links.sign_up"), new_user_registration_path %>
+        <% end %>
+
+        <% if Rails.env.development? %>
+          <p><%= link_to t(".letter_opener_link"), admin_letter_opener_web_path %></p>
+        <% end %>
+        <% if policy(:mission_control_jobs).index? %>
+          <p><%= link_to t(".mission_control_jobs_link"), admin_mission_control_jobs_path %></p>
+        <% end %>
+      </aside>
+
+      <main class="main-content">
+        <% if notice %>
+          <p class="notice"><%= notice %></p>
+        <% end %>
+        <% if alert %>
+          <p class="alert"><%= alert %></p>
+        <% end %>
+
+        <%= yield %>
+      </main>
+    </div>
+  </body>
+</html>

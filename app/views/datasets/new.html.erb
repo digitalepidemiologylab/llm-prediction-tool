@@ -1,0 +1,26 @@
+<% title = t(".title"); content_for(:title, title) %>
+
+<div class="breadcrumbs">
+  <%= link_to t("activerecord.models.dataset.other"), datasets_path %>
+  &gt;
+  <%= t(".new") %>
+</div>
+
+<%= form_with(model: @dataset, url: datasets_path) do |f| %>
+  <div class="field">
+    <%= f.label :name, class: "form-label" %>
+    <%= f.text_field :name, class: "form-input" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :evaluation, class: "form-label" %>
+    <%= f.file_field :evaluation, class: "form-input" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :column_separator, class: "form-label" %>
+    <%= f.text_field :column_separator, class: "form-input", maxlength: 1 %>
+  </div>
+
+  <%= f.submit t(".submit") %>
+<% end %>

@@ -1,0 +1,96 @@
+---
+en:
+  activerecord:
+    attributes:
+      dataset:
+        column_separator: Column Separator
+        evaluation: Evaluation CSV
+        name: Name
+      experiment:
+        llm_id: LLM
+      result:
+        created_at: Created
+        status: Status
+        status_values:
+          cancelled: Cancelled
+          failed: Failed
+          initial: Initial
+          processing: Processing
+          ready: Ready
+    errors:
+      models:
+        experiment:
+          attributes:
+            llm_id:
+              deployed_by_wrong_user: must be either hosted or deployed by Dataset's User
+    models:
+      dataset:
+        one: Dataset
+        other: Datasets
+      experiment:
+        one: Experiment
+        other: Experiments
+      llm:
+        one: LLM
+        other: LLMs
+      result:
+        one: Result
+        other: Results
+  app:
+    name: LLM Benchmark
+  datasets:
+    create:
+      flash_failure: Failed to create dataset.
+      flash_success: Dataset was successfully created.
+    experiments:
+      create:
+        flash_failure: Failed to create experiment.
+        flash_success: Experiment was successfully created.
+      new:
+        llm_select_prompt: Select an LLM
+        submit: Create experiment
+        system_prompt_hint: You are a helpful assistant. Return a JSON object annotating the user data.
+        title: New experiment
+    index:
+      new_dataset: New Dataset
+      none: No datasets found.
+    new:
+      new: New
+      submit: Create dataset
+      title: New Dataset
+    show:
+      new_experiment: New Experiment
+      no_experiments: This dataset has no experiments.
+      show_experiment: View
+  experiments:
+    results:
+      create:
+        flash_failure: Failed to create result.
+        flash_success: Result record was successfully created; processing will begin shortly.
+    show:
+      annotated_rows:
+        one: Annotated 1 row
+        other: Annotated %{count} rows
+      cancel_result: Cancel
+      create_result: Create result
+      download_data: Download data
+      no_data_available: No data available
+      no_results: This experiment has no results.
+      result_links: Links
+      result_notes: Notes
+      skipped_rows:
+        one: Skipped 1 row
+        other: Skipped %{count} rows
+  home:
+    index:
+      under_construction: Coming soon!
+  layouts:
+    application:
+      letter_opener_link: Dev Emails
+      mission_control_jobs_link: MissionControlJobs
+      sign_out: Log out
+  results:
+    cancellations:
+      create:
+        flash_error: Failed to cancel.
+        flash_success: Request to cancel successfully received.

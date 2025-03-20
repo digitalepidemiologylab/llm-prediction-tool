@@ -1,0 +1,51 @@
+# We want Exclude directives from different
+# config files to get merged, not overwritten
+inherit_mode:
+  merge:
+    - Exclude
+
+inherit_gem:
+  rubocop-rails_config:
+    - config/rails.yml
+  standard:
+    - config/base.yml
+
+require:
+  # Base
+  - rubocop-rspec
+  # Performance cops are bundled with Standard
+  - rubocop-performance
+  # Standard's config uses this custom cop, so it must be loaded
+  - standard/cop/block_single_line_braces
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.4.2
+  DisabledByDefault: false
+  Exclude:
+    - "app/vendor/**/*"
+    - "db/schema.rb"
+    - "node_modules/**/*"
+    - "bin/**/*"
+    - "vendor/**/*"
+    - "tmp/**/*"
+
+# Rails
+
+# StrongMigrations recommends against `change_table`
+Rails/BulkChangeTable:
+  Enabled: false
+
+# RSpec
+
+RSpec/ExampleLength:
+  Max: 10
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 15
+
+RSpec/NestedGroups:
+  Max: 5

@@ -1,0 +1,27 @@
+# https://devcenter.heroku.com/articles/ruby-support-reference#ruby-versions
+FROM ruby:3.4.2-alpine
+ENV RUBYGEMS_VERSION=3.6.2
+
+LABEL maintainer="salathe-devadmin@groupes.epfl.ch"
+
+WORKDIR /app
+
+RUN apk add --no-cache --update \
+  build-base \
+  gcompat \
+  jemalloc \
+  nodejs \
+  yarn \
+  tzdata \
+  postgresql-dev \
+  yaml-dev \
+  && rm -rf /var/cache/apk/*
+RUN gem update --system $RUBYGEMS_VERSION
+
+COPY Gemfile Gemfile.lock ./
+RUN bundle install -j $(nproc)
+
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile --non-interactive
+
+ENTRYPOINT ["./docker/docker-entrypoint.sh"]
