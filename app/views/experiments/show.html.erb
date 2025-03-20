@@ -1,0 +1,75 @@
+<% content_for(:title, Experiment.model_name.human) %>
+
+<div class="breadcrumbs">
+  <%= link_to @experiment.dataset.name, dataset_path(@experiment.dataset) %>
+  &gt;
+  <%= Experiment.model_name.human %>
+</div>
+
+<table class="attributes-table">
+  <tbody>
+    <tr>
+      <th><%= Llm.model_name.human %></th>
+      <td><%= @experiment.llm.name %></td>
+    </tr>
+    <tr>
+      <th><%= Experiment.human_attribute_name(:system_prompt) %></th>
+      <td><%= @experiment.system_prompt %></td>
+    </tr>
+    <tr>
+      <th><%= Experiment.human_attribute_name(:created_at) %></th>
+      <td><%= @experiment.created_at %></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4><%= t("activerecord.models.result.other") %></h4>
+
+<% if @results.any? %>
+  <table class="has-many-table">
+    <thead>
+      <tr>
+        <th><%= Result.human_attribute_name(:created_at) %></th>
+        <th><%= Result.human_attribute_name(:status) %></th>
+        <th><%= t(".result_links") %></th>
+        <th><%= t(".result_notes") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @results.each do |result| %>
+        <tr id="<%= dom_id(result) %>">
+          <td><%= result.created_at %></td>
+          <td>
+            <%= t(result.status, scope: "activerecord.attributes.result.status_values") %>
+            <% if result.may_cancel? %>
+              <%= button_to t(".cancel_result"), result_cancellations_path(result) %>
+            <% end %>
+          </td>
+          <td>
+            <% if result.final? %>
+              <% if Results::DataPolicy.new(pundit_user, result).show? %>
+                <%= link_to t(".download_data"), result_data_path(result, data: {turbo: false}) %>
+              <% else %>
+                <i><%= t(".no_data_available") %></i>
+              <% end %>
+            <% end %>
+          </td>
+          <td>
+            <% if result.status != "initial" %>
+              <div><%= t(".annotated_rows", count: (result.data["annotations"] || []).length) %></div>
+            <% end %>
+            <% if result.status == "failed" %>
+              <div><%= result.data.dig("error", "message") %></div>
+            <% end %>
+            <% if result.data["skipped"].present? %>
+              <div><%= t(".skipped_rows", count: result.data["skipped"].length) %></div>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p><%= t(".no_results") %></p>
+<% end %>
+<%= button_to t(".create_result"), experiment_results_path(@experiment) %>

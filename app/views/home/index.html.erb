@@ -1,0 +1,9 @@
+<% content_for(:title, "Home") %>
+
+<h1><%= t("app.name") %></h1>
+
+<p><%= t(".under_construction") %></p>
+
+<% if user_signed_in? %>
+  <p><%= link_to "View Datasets", datasets_path %></p>
+<% end %>

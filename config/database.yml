@@ -1,0 +1,46 @@
+x-app: &app
+  adapter: postgresql
+  encoding: UTF8
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 3 } %>
+x-worker: &worker
+  adapter: postgresql
+  encoding: UTF8
+  pool: <%= ENV.fetch("WORKER_THREADS", "1").to_i + 2 %> # threads + polling + heartbeat
+  database_tasks: false # Same physical DB, so no need to save/load extra schema
+
+development:
+  primary:
+    <<: *app
+    host: db
+    user: postgres
+    database: llm-benchmark-dev
+  queue:
+    <<: *worker
+    host: db
+    user: postgres
+    database: llm-benchmark-dev
+
+test:
+  primary:
+    <<: *app
+    host: db
+    user: postgres
+    database: llm-benchmark-test<%= ENV["TEST_ENV_NUMBER"] %>
+  queue:
+    <<: *worker
+    host: db
+    user: postgres
+    database: llm-benchmark-test<%= ENV["TEST_ENV_NUMBER"] %>
+
+production: &db_prd
+  primary:
+    <<: *app
+    url: <%= ENV["DATABASE_URL"] %>
+  queue:
+    <<: *worker
+    url: <%= ENV["DATABASE_URL"] %>
+
+# SolidCache
+cache:
+  <<: *app
+  url: <%= ENV["CACHE_URL"] %>

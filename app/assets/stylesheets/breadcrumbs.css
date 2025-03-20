@@ -1,0 +1,12 @@
+.breadcrumbs {
+  font-size: 1.5rem;
+  margin: 1rem 0;
+}
+
+.breadcrumbs a {
+  text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+  text-decoration: underline;
+}

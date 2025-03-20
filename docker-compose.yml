@@ -1,0 +1,43 @@
+x-base: &base
+  build:
+    context: .
+    dockerfile: ./docker/Dockerfile.dev
+  stdin_open: true
+  tty: true
+  env_file:
+    - .env
+    - .env.override
+  volumes:
+    - .:/app
+    - bundle:/usr/local/bundle
+    - node_modules:/app/node_modules
+  depends_on:
+    - db
+  tmpfs:
+    - /tmp
+
+services:
+  app:
+    <<: *base
+    command: bin/thrust bin/rails s -p 3000 -b 0.0.0.0
+    ports:
+      - 80:3000
+
+  worker:
+    <<: *base
+    command: bin/jobs
+
+  db:
+    image: postgres:16.6-alpine
+    shm_size: 1G
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  bundle:
+  db_data:
+  node_modules:

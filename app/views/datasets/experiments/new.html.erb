@@ -1,0 +1,31 @@
+<% title = t(".title"); content_for(:title, title) %>
+
+<h1><%= title %></h1>
+
+<%= form_with(model: @experiment, url: dataset_experiments_path(@dataset)) do |f| %>
+  <div class="field">
+    <%= f.label :dataset_name, "Dataset", class: "form-label" %>
+    <%= text_field_tag :dataset_name, "#{@dataset.name} (#{@dataset.id})", disabled: true, class: "form-input", autocomplete: "off" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :llm_id, class: "form-label" %>
+    <%= f.grouped_collection_select(
+          :llm_id,
+          @available_grouped_llms,
+          :last,
+          ->(group) { provider_name(group.first) },
+          :id,
+          :name,
+          {prompt: t(".llm_select_prompt")},
+          {class: "form-input"}
+        ) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :system_prompt, "System Prompt", class: "form-label" %>
+    <%= f.text_area :system_prompt, class: "form-input", rows: 5, placeholder: t(".system_prompt_hint") %>
+  </div>
+
+  <%= f.submit t(".submit") %>
+<% end %>

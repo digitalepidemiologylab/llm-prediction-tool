@@ -1,0 +1,23 @@
+{
+  "object": "chat.completion",
+  "id": "",
+  "created": 1739290165,
+  "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
+  "system_fingerprint": "3.0.1-sha-bb9095a",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "Okay, the user wants me to convert the English word \"Hello\" into French. I remember that \"Hello\" in French is \"Bonjour\". I should make sure to present this in the correct JSON format as per the instructions. The response needs to be only the JSON data without any explanations or additional text. So, I'll structure it like `{\"fr\": \"Bonjour\"}`. That should meet the user's requirements accurately.\n</think>\n\n{\"fr\": \"Bonjour\"}"
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 60,
+    "completion_tokens": 96,
+    "total_tokens": 156
+  }
+}

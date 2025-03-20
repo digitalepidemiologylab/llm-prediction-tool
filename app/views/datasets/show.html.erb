@@ -1,0 +1,57 @@
+<% title = "#{@dataset.name} | #{Dataset.model_name.human}"; content_for(:title, title) %>
+
+<div class="breadcrumbs">
+  <%= link_to t("activerecord.models.dataset.other"), datasets_path %>
+  &gt;
+  <%= @dataset.name %>
+</div>
+
+<table class="attributes-table">
+  <tbody>
+    <tr>
+      <th><%= Dataset.human_attribute_name(:name) %></th>
+      <td><%= @dataset.name %></td>
+    </tr>
+    <tr>
+      <th><%= Dataset.human_attribute_name(:evaluation) %></th>
+      <td>
+        <%= @dataset.evaluation.filename %>
+        (<%= number_to_human_size(@dataset.evaluation.blob.byte_size) %>)
+      </td>
+    </tr>
+    <tr>
+      <th><%= Dataset.human_attribute_name(:column_separator) %></th>
+      <td><%= @dataset.column_separator %></td>
+    </tr>
+    <tr>
+      <th><%= Dataset.human_attribute_name(:created_at) %></th>
+      <td><%= @dataset.created_at %></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3><%= t("activerecord.models.experiment.other") %></h4>
+
+<% if @experiments.any? %>
+  <table class="has-many-table">
+    <thead>
+      <tr>
+        <th><%= Llm.model_name.human %></th>
+        <th><%= Experiment.human_attribute_name(:system_prompt) %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @experiments.each do |experiment| %>
+        <tr>
+          <td><%= experiment.llm.name %></td>
+          <td><%= experiment.system_prompt %></td>
+          <td><%= link_to t(".show_experiment"), experiment_path(experiment) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p><%= t(".no_experiments") %></p>
+<% end %>
+<%= link_to t(".new_experiment"), new_dataset_experiment_path(@dataset) %>

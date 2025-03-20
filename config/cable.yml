@@ -1,0 +1,11 @@
+development:
+  adapter: solid_cable
+  database: llm-benchmark-dev
+
+test:
+  adapter: test
+
+production:
+  adapter: solid_cable
+  database: <%= ENV["DATABASE_URL"] %>
+  channel_prefix: app_production

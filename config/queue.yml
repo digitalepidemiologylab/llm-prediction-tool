@@ -1,0 +1,18 @@
+default: &default
+  dispatchers:
+    - batch_size: 500
+      polling_interval: 1
+  workers:
+    - processes: <%= ENV.fetch("WORKER_PROCESSES", "1").to_i %>
+      polling_interval: <%= ENV.fetch("WORKER_POLLING_INTERVAL", "3").to_f %>
+      threads: <%= ENV.fetch("WORKER_THREADS", "1").to_i %>
+      queues: "*"
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
